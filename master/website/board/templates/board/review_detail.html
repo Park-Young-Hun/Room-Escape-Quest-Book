@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block scripts %}
+{{ block.super }}
+
+
+{% endblock %}
+
+{% block body %}
+
+{% include "navbar.html" %}
+{% include "sidebar.html" %}
+
+<!--main content start-->
+<section id="main-content">
+    <section class="wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3 class="page-header"><i class="fa fa-table"></i> 리뷰 등록</h3>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+
+                   <form>
+                      <p><textarea cols="100" rows="20" id="content_{{id}}" value="{{obj}}"></textarea></p>
+                       <button class="btn btn-primary btn-sm" id="insert_{{id}}" name="{{ id }}" onclick="insert_element(this);" style="width: 5%">등록</button>
+                       <button class="btn btn-primary btn-sm" id="update_{{id}}" name="{{ id }}" onclick="insert_element(this);" style="width: 5%">수정</button>
+                       <button class="btn btn-primary btn-sm" id="delete_{{id}}" name="{{ id }}" onclick="delete_element(this);" style="width: 5%">삭제</button>
+
+                   </form>
+
+            </div>
+        </div>
+
+        <script>
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            var csrftoken = getCookie('csrftoken');
+            var xhr;
+
+            function insert_element(elem) {
+
+                var rowId = elem.getAttribute('name');
+                var content = document.getElementById("content_{{id}}").value;
+
+                var payload = {
+                    "content": content
+                };
+
+                xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == 4) {
+                        if(xhr.status==201) {
+                            alert("등록이 완료되었습니다.");
+                            location.href="http://127.0.0.1:8000/board/reviews"
+                        }
+                    }
+                    else {
+                        if(xhr.status==400) {
+                            var data = xhr.responseText;
+                            var obj = JSON.parse(data);
+
+                            if (obj.detail == "DuplicateCode") {
+                                alert("코드가 이미 존재합니다.");
+                            }
+                            else {
+                                alert("400 Bad Request");
+                            }
+                        }
+                    }
+                };
+
+                var strurl = "http://127.0.0.1:8080/rest_api/reviews/" + rowId;
+                xhr.open("POST", strurl, true);
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.send(JSON.stringify(payload));
+            }
+
+            function update_element(elem) {
+                var rowId = elem.getAttribute('name');
+
+                var pnSelect = document.querySelector('.participant_num' + rowId);
+                var pnId = pnSelect.options[pnSelect.selectedIndex].value;
+
+                var efSelect = document.querySelector('.escape_flag' + rowId);
+                var efId = efSelect.options[efSelect.selectedIndex].value;
+
+                var vd = document.getElementById("visited_day" + rowId).value;
+                var reg = document.getElementById("region" + rowId).value;
+                var cafeNm = document.getElementById("cafe_name" + rowId).value;
+                var themeNm = document.getElementById("theme_name" + rowId).value;
+                var rt = document.getElementById("r_time" + rowId).value;
+
+                var payload = {
+                    "visited_day": vd,
+                    "region": reg,
+                    "cafe_name": cafeNm,
+                    "theme_name": themeNm,
+                    "participant_num": pnId,
+                    "escape_flag": efId,
+                    "r_time": rt
+                };
+
+                xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == 4) {
+                        if(xhr.status==200)
+                            alert("수정이 완료되었습니다.");
+                        location.reload();
+                    }
+                    else {
+                        if(xhr.status==400) {
+                            var data = xhr.responseText;
+                            var obj = JSON.parse(data);
+
+                            if (obj.detail == "") {//추후 에러처리 추가시 사용
+                                alert("에러코드");
+                            }
+                            else {
+                                alert("400 Bad Request");
+                            }
+                        }
+                    }
+                };
+
+                var strurl = "http://127.0.0.1:8080/rest_api/reviews/" + rowId;
+                xhr.open("PUT", strurl, true);
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.send(JSON.stringify(payload));
+            }
+
+            function delete_element(elem) {
+                var rowId = elem.getAttribute('name');
+
+                xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == 4) {
+                        if(xhr.status==204)
+                            alert("삭제가 완료되었습니다.");
+                        location.reload();
+                    }
+                    else {
+                        if(xhr.status==400) {
+                            var data = xhr.responseText;
+                            var obj = JSON.parse(data);
+
+                            if (obj.detail == "") {//추후 에러처리 추가시 사용
+                                alert("에러코드");
+                            }
+                            else {
+                                alert("400 Bad Request");
+                            }
+                        }
+                    }
+                };
+
+                var strurl = "http://127.0.0.1:8080/rest_api/reviews/" + rowId;
+                xhr.open("DELETE", strurl, true);
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.send(null);
+            }
+
+            function review_detail(elem) {
+                var rowId = elem.getAttribute('name');
+                var strurl = "http://127.0.0.1:8000/board/reviews/" + rowId;
+                location.href = strurl;
+            }
+        </script>
+    </section>
+    <!--main content end-->
+</section>
+<!-- container section start -->
+{% endblock %}

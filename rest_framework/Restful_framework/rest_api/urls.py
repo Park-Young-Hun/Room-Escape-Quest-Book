@@ -20,9 +20,7 @@ app_name = 'rest_api'
 
 urlpatterns = [
 
-    # 1단계 기준정보 CRUD API
-
-    path('corporations', views.co_list, name='co_list'),
-    path('corporations/<int:pk>', views.co_detail, name='co_detail'),
+    path('reviews', views.review_list, name='review_list'),
+    path('reviews/<int:pk>', views.review_detail, name='review_detail'),
 
 ]

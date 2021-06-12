@@ -5,7 +5,8 @@ app_name = 'board'
 urlpatterns = [
     # 화면 urls 항목
     path('', views.home, name='home'),
-    path('b_co/', views.b_co, name='b_co_list'),
+    path('reviews/', views.review_list, name='review_list'),
+    path('reviews/<int:pk>', views.review_detail, name='review_detail'),
     path('b_item/', views.b_item, name='b_item_list'),
 
 

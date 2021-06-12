@@ -17,7 +17,7 @@
     <section class="wrapper">
         <div class="row">
             <div class="col-lg-12">
-                <h3 class="page-header"><i class="fa fa-table"></i> 법인정보</h3>
+                <h3 class="page-header"><i class="fa fa-table"></i> 해결한 퀘스트 기록</h3>
             </div>
         </div>
 
@@ -28,52 +28,48 @@
                         <table class="table" width="100%">
                             <thead>
                                 <tr>
-                                    <th>법인코드</th>
-                                    <th>법인명</th>
-                                    <th>법인약명</th>
-                                    <th>법인대표</th>
-                                    <th>법인유형</th>
-                                    <th>법인구분</th>
-                                    <th>국가코드</th>
-                                    <th>기준통화코드</th>
-                                    <th></th>
-                                    <th></th>
+                                    <th>클리어 날짜</th>
+                                    <th>지역</th>
+                                    <th>방탈출 카페</th>
+                                    <th>테마</th>
+                                    <th>참가인원</th>
+                                    <th>탈출 여부</th>
+                                    <th>남은 시간</th>
                                 </tr>
                             </thead>
 
                             <tbody>
                                 <tr bgcolor="#F7F7F7">
                                     <td>
-                                        <input type="text" class="form-control" id="co_cd">
+                                        <input type="text" class="form-control" id="visited_day">
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control" id="co_nm">
+                                        <input type="text" class="form-control" id="region">
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control" id="co_shnm">
+                                        <input type="text" class="form-control" id="cafe_name">
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control" id="co_rpr">
+                                        <input type="text" class="form-control" id="theme_name">
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control" id="co_type">
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" id="co_div">
-                                    </td>
-                                    <td>
-                                        <select class="cn" style="width:100%;padding:3px;">
-                                            {% for i in rsUnitCn %}
-                                            <option value="{{i.id}}"> {{ i.cd_nm }} </option>
-                                            {% endfor %}
+                                        <select class="participant_num" style="width:100%;padding:3px;" id="participant_num">
+                                            <option value=1> 1</option>
+                                            <option value=2> 2</option>
+                                            <option value=3> 3</option>
+                                            <option value=4> 4</option>
+                                            <option value=5> 5</option>
+                                            <option value=6> 6</option>
                                         </select>
                                     </td>
                                     <td>
-                                        <select class="cur"  style="width:100%;padding:3px;">
-                                            {% for i in rsUnitCur %}
-                                            <option value="{{i.id}}"> {{ i.cd_nm }} </option>
-                                            {% endfor %}
+                                        <select class="escape_flag" style="width:100%;padding:3px;" id="escape_flag">
+                                            <option value="O"> O</option>
+                                            <option value="X"> X</option>
                                         </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="r_time">
                                     </td>
                                     <td>
                                         <button onclick="insert_element();" class="btn btn-default btn-sm">저장</button>
@@ -83,51 +79,45 @@
                                 {% if rsCo %}
                                 {% for i in rsCo %}
                                 <tr>
-                                    <td id="co_cd{{ i.id }}" value="{{ i.co_cd }}">{{ i.co_cd }}</td>
                                     <td>
-                                        <input type="text" class="form-control" id="co_nm{{ i.id }}" value="{{ i.co_nm }}"/>
+                                        <input type="text" class="form-control" id="visited_day{{ i.id }}" value="{{ i.visited_day }}"/>
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control" id="co_shnm{{ i.id }}" value="{{ i.co_shnm }}"/>
+                                        <input type="text" class="form-control" id="region{{ i.id }}" value="{{ i.region }}"/>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="cafe_name{{ i.id }}" value="{{ i.cafe_name }}"/>
                                     </td>
                                     <td width="15%">
-                                        <input type="text" class="form-control" id="co_rpr{{ i.id }}" value="{{ i.co_rpr }}"/>
-                                    </td>
-                                    <td >
-                                        <input type="text" class="form-control" id="co_type{{ i.id }}" value="{{ i.co_type }}"/>
+                                        <input type="text" class="form-control" id="theme_name{{ i.id }}" value="{{ i.theme_name }}"/>
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control" id="co_div{{ i.id }}" value="{{ i.co_div }}"/>
-                                    </td>
-                                    <td>
-                                        {% if not rsUnitCn %}
-                                        <p class="text-center">지정국가 없음</p>
-                                        {% else %}
-                                        <select class="unitcn_id{{ i.id }}" style="width:100%;padding:3px;">
-                                            {% for k in rsUnitCn %}
-                                            {% if i.unitcn_id == k.id %}
-                                            <option value="{{ k.id }}" selected> {{ k.cd_nm }} </option>
+                                        <select class="participant_num{{ i.id }}" style="width:100%;padding:3px;">
+                                            {% for k in range %}
+                                            {% if i.participant_num == k %}
+                                            <option value="{{ k }}" selected> {{ k }} </option>
                                             {% else %}
-                                            <option value="{{ k.id }}"> {{ k.cd_nm }} </option>
+                                            <option value="{{ k }}"> {{ k }} </option>
                                             {% endif %}
                                             {% endfor %}
                                         </select>
-                                        {% endif %}
                                     </td>
                                     <td>
-                                        {% if not rsUnitCur %}
-                                        <p class="text-center">기준통화 없음</p>
-                                        {% else %}
-                                        <select class="unitcur_id{{ i.id }}" style="width:100%;padding:3px;">
-                                            {% for k in rsUnitCur %}
-                                            {% if i.unitcur_id == k.id %}
-                                            <option value="{{ k.id }}" selected>{{ k.cd_nm }}</option>
+                                        <select class="escape_flag{{ i.id }}" style="width:100%;padding:3px;">
+                                            {% for k in p_num %}
+                                            {% if i.escape_flag == k %}
+                                            <option value="{{ k }}" selected> {{ k }} </option>
                                             {% else %}
-                                            <option value="{{ k.id }}">{{ k.cd_nm }}</option>
+                                            <option value="{{ k }}"> {{ k }} </option>
                                             {% endif %}
                                             {% endfor %}
                                         </select>
-                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="r_time{{ i.id }}" value="{{ i.r_time }}"/>
+                                    </td>
+                                     <td width="5%">
+                                        <button class="btn btn-default btn-sm" id="review_{{i.id}}" name="{{i.id}}" onclick="review_detail(this)">리뷰 보기</button>
                                     </td>
                                     <td width="5%">
                                         <button class="btn btn-default btn-sm" id="update_{{i.id}}" name="{{i.id}}" onclick="update_element(this);">수정</button>
@@ -173,71 +163,58 @@
             var xhr;
 
             function insert_element() {
-                var coCd = document.getElementById("co_cd").value;
-                var coNm = document.getElementById("co_nm").value;
-                var coShnm = document.getElementById("co_shnm").value;
-                var coRpr = document.getElementById("co_rpr").value;
-                var coType = document.getElementById("co_type").value;
-                var coDiv = document.getElementById("co_div").value;
+                var vd = document.getElementById("visited_day").value;
+                var reg = document.getElementById("region").value;
+                var cafeNm = document.getElementById("cafe_name").value;
+                var themeNm = document.getElementById("theme_name").value;
+                var rt = document.getElementById("r_time").value;
 
-                if(coCd == '') {
-                    alert('법인코드를 입력해주십시오.');
-                    document.getElementById("co_cd").focus();
+
+                if(vd == '') {
+                    alert('클리어 날짜를 입력해주십시오.');
+                    document.getElementById("visited_day").focus();
                     return false;
                 }
 
-                if(coNm == '') {
-                    alert('법인명을 입력해주십시오.');
-                    document.getElementById("co_nm").focus();
+                if(reg == '') {
+                    alert('지역을 입력해주십시오.');
+                    document.getElementById("region").focus();
                     return false;
                 }
 
-                if(coShnm == '') {
-                    alert('법인약명을 입력해주십시오.');
-                    document.getElementById("co_shnm").focus();
+                if(cafeNm == '') {
+                    alert('방탈출 카페명을 입력해주십시오.');
+                    document.getElementById("cafe_name").focus();
                     return false;
                 }
 
-                if(coRpr == '') {
-                    alert('법인대표를 입력해주십시오.');
-                    document.getElementById("co_rpr").focus();
+                if(themeNm == '') {
+                    alert('테마명를 입력해주십시오.');
+                    document.getElementById("theme_name").focus();
                     return false;
                 }
 
-                if(coType == '') {
-                    alert('법인유형을 입력해주십시오.');
-                    document.getElementById("co_type").focus();
-                    return false;
-                }
+                var pnSelect = document.querySelector('.participant_num');
+                var pnId = pnSelect.options[pnSelect.selectedIndex].value;
 
-                if(coDiv == '') {
-                    alert('법인구분을 입력해주십시오.');
-                    document.getElementById("co_div").focus();
-                    return false;
-                }
-
-                var unitCurSelect = document.querySelector('.cur');
-                var unitCurId = unitCurSelect.options[unitCurSelect.selectedIndex].value;
-
-                var unitCnSelect = document.querySelector('.cn');
-                var unitCnId = unitCnSelect.options[unitCnSelect.selectedIndex].value;
+                var efSelect = document.querySelector('.escape_flag');
+                var efId = efSelect.options[efSelect.selectedIndex].value;
 
                 var payload = {
-                    "co_cd": coCd,
-                    "co_nm": coNm,
-                    "co_shnm": coShnm,
-                    "co_rpr": coRpr,
-                    "co_type": coType,
-                    "co_div": coDiv,
-                    "unitcur": unitCurId,
-                    "unitcn": unitCnId
+                    "visited_day": vd,
+                    "region": reg,
+                    "cafe_name": cafeNm,
+                    "theme_name": themeNm,
+                    "participant_num": pnId,
+                    "escape_flag": efId,
+                    "r_time": rt
                 };
 
                 xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState == 4) {
                         if(xhr.status==201)
-                            alert("생성이 완료되었습니다.");
+                            alert("등록이 완료되었습니다.");
                         location.reload();
                     }
                     else {
@@ -246,7 +223,7 @@
                             var obj = JSON.parse(data);
 
                             if (obj.detail == "DuplicateCode") {
-                                alert("법인 코드가 이미 존재합니다.");
+                                alert("코드가 이미 존재합니다.");
                             }
                             else {
                                 alert("400 Bad Request");
@@ -255,7 +232,7 @@
                     }
                 };
 
-                var strurl = "http://223.194.46.212:8757/rest_api/corporations";
+                var strurl = "http://127.0.0.1:8080/rest_api/reviews";
                 xhr.open("POST", strurl, true);
                 xhr.setRequestHeader("X-CSRFToken", csrftoken);
                 xhr.setRequestHeader("Content-Type", "application/json");
@@ -263,30 +240,28 @@
             }
 
             function update_element(elem) {
-                var coId = elem.getAttribute('name');
+                var rowId = elem.getAttribute('name');
 
-                var unitCnSelect = document.querySelector('.unitcn_id' + coId);
-                var unitCnId = unitCnSelect.options[unitCnSelect.selectedIndex].value;
+                var pnSelect = document.querySelector('.participant_num' + rowId);
+                var pnId = pnSelect.options[pnSelect.selectedIndex].value;
 
-                var unitCurSelect = document.querySelector('.unitcur_id' + coId);
-                var unitCurId = unitCurSelect.options[unitCurSelect.selectedIndex].value;
+                var efSelect = document.querySelector('.escape_flag' + rowId);
+                var efId = efSelect.options[efSelect.selectedIndex].value;
 
-                var coCd = document.getElementById('co_cd' + coId).value;
-                var coNm = document.getElementById('co_nm' + coId).value;
-                var coShnm = document.getElementById('co_shnm' + coId).value;
-                var coRpr = document.getElementById('co_rpr' + coId).value;
-                var coType = document.getElementById('co_type' + coId).value;
-                var coDiv = document.getElementById('co_div' + coId).value;
+                var vd = document.getElementById("visited_day" + rowId).value;
+                var reg = document.getElementById("region" + rowId).value;
+                var cafeNm = document.getElementById("cafe_name" + rowId).value;
+                var themeNm = document.getElementById("theme_name" + rowId).value;
+                var rt = document.getElementById("r_time" + rowId).value;
 
                 var payload = {
-                    "co_cd": coCd,
-                    "co_nm": coNm,
-                    "co_shnm": coShnm,
-                    "co_rpr": coRpr,
-                    "co_type": coType,
-                    "co_div": coDiv,
-                    "unitcur": unitCurId,
-                    "unitcn": unitCnId
+                    "visited_day": vd,
+                    "region": reg,
+                    "cafe_name": cafeNm,
+                    "theme_name": themeNm,
+                    "participant_num": pnId,
+                    "escape_flag": efId,
+                    "r_time": rt
                 };
 
                 xhr = new XMLHttpRequest();
@@ -311,7 +286,7 @@
                     }
                 };
 
-                var strurl = "http://223.194.46.212:8757/rest_api/corporations/" + coId;
+                var strurl = "http://127.0.0.1:8080/rest_api/reviews/" + rowId;
                 xhr.open("PUT", strurl, true);
                 xhr.setRequestHeader("X-CSRFToken", csrftoken);
                 xhr.setRequestHeader("Content-Type", "application/json");
@@ -319,7 +294,7 @@
             }
 
             function delete_element(elem) {
-                var coId = elem.getAttribute('name');
+                var rowId = elem.getAttribute('name');
 
                 xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function() {
@@ -343,11 +318,17 @@
                     }
                 };
 
-                var strurl = "http://223.194.46.212:8757/rest_api/corporations/" + coId;
+                var strurl = "http://127.0.0.1:8080/rest_api/reviews/" + rowId;
                 xhr.open("DELETE", strurl, true);
                 xhr.setRequestHeader("X-CSRFToken", csrftoken);
                 xhr.setRequestHeader("Content-Type", "application/json");
                 xhr.send(null);
+            }
+
+            function review_detail(elem) {
+                var rowId = elem.getAttribute('name');
+                var strurl = "http://127.0.0.1:8000/board/reviews/" + rowId;
+                location.href = strurl;
             }
         </script>
     </section>

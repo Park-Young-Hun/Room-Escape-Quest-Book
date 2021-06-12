@@ -20,7 +20,6 @@ class BUser(models.Model):  # 사용자관리
     class Meta:
         managed = False
         db_table = 'b_user'
-        app_label = 'default'
 
 
 class Review(models.Model):  # 방탈출 기록
@@ -29,7 +28,7 @@ class Review(models.Model):  # 방탈출 기록
     region = models.CharField(db_column='region', max_length=50, blank=True, null=True)
     cafe_name = models.CharField(db_column='cafe_name', max_length=50, blank=True, null=True)
     theme_name = models.CharField(db_column='theme_name', max_length=50, blank=True, null=True)
-    participant_num = models.IntegerField(db_column='participant_num', max_value=10, blank=True, null=True, default=2)
+    participant_num = models.IntegerField(db_column='participant_num', blank=True, null=True, default=2)
     escape_flag = models.CharField(db_column='escape_flag', max_length=1, blank=True, null=True, default='O')
     r_time = models.CharField(db_column='r_time', max_length=50, blank=True, null=True)
     content = models.CharField(db_column='content', max_length=300, blank=True, null=True)

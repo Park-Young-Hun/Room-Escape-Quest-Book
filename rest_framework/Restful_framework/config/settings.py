@@ -83,9 +83,6 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASE_ROUTERS = [
-    'rest_api.routers.MultiDBRouter',
-]
 
 DATABASES = {
     'default': {
