@@ -1,0 +1,662 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+home
+{% endblock %}
+
+
+{% block body %}
+
+{% include "navbar.html" %}
+{% include "sidebar.html" %}
+<!--main content start-->
+<section id="main-content">
+    <section class="wrapper">
+        <!--overview start-->
+        <div class="row">
+            <div class="col-lg-12">
+                <h3 class="page-header"><i class="fa fa-laptop"></i> Dashboard</h3>
+                <ol class="breadcrumb">
+                    <li><i class="fa fa-home"></i><a href="/">Home</a></li>
+                    <li><i class="fa fa-laptop"></i>Dashboard</li>
+                </ol>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2><strong>당기&nbsp 투입&nbsp|&nbsp사용&nbsp 비교</strong></h2>
+                    </div>
+                    <div class="info-box blue-bg" onclick="location.href='{% url 'board:chart1' %}';">
+                        <i class="fa fa-krw"></i>
+                        <div class="count">-6.674%</div>
+                        <div class="title">(매출액)</div>
+                    </div>
+                </div>
+                <!--/.info-box-->
+            </div>
+            <!--/.col-->
+
+            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2><strong>전년 | 전월 비교</strong></h2>
+                    </div>
+                    <div class="info-box brown-bg" onclick="location.href='{% url 'board:chart2' %}';">
+                        <i class="fa fa-bar-chart-o"></i>
+                        <div class="count">-7.538%</div>
+                        <div class="title">(성장률)</div>
+                    </div>
+                </div>
+                <!--/.info-box-->
+            </div>
+            <!--/.col-->
+
+            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2><strong>Explanation</strong></h2>
+                    </div>
+                    <div class="info-box dark-bg" onclick="popup();">
+                        <i class="fa fa-search"></i>
+                        <div class="count">Explanation</div>
+                        <div class="title">(모델&nbsp해석)</div>
+                    </div>
+                </div>
+                <!--/.info-box-->
+            </div>
+            <!--/.col-->
+
+            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2><strong>Simulator</strong></h2>
+                    </div>
+                    <div class="info-box green-bg" onclick="location.href='{% url 'board:simulate' %}';">
+                        <i class="fa fa-desktop"></i>
+                        <div class="count">Simulate</div>
+                        <div class="title">(내부요인 &nbsp~&nbsp 외부요인)</div>
+                    </div>
+                </div>
+                <!--/.info-box-->
+            </div>
+            <!--/.col-->
+        </div>
+        <!--/.row-->
+
+        <div class="row">
+            <div class="col-lg-11 col-md-12">
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2><i class="icon_piechart"></i><strong>Data</strong></h2>
+                        <div class="panel-actions">
+                            <a href="#" class="btn-setting"><i class="fa fa-rotate-right"></i></a>
+                            <a href="#" class="btn-minimize"><i class="fa fa-chevron-up"></i></a>
+                            <a href="#" class="btn-close"><i class="fa fa-times"></i></a>
+                        </div>
+                    </div>
+                    <section class="panel">
+                        <div class="panel-body text-center">
+                            <label>조회 시작 시점</label>
+                            <select id="year_selectbox" onchange="change_data_year()"></select>
+                            <canvas id="mychart" height="300" width="1500"></canvas>
+                        </div>
+                    </section>
+
+                </div>
+            </div>
+            <div class="col-md-1">
+                <button class="btn btn-primary btn-lg" onclick="train()">학습</button>
+                <br>
+                {% if model %}
+                <button class="btn btn-default btn-lg" id="btn_get_predict" onclick="predict()">예측</button>
+                {% else %}
+                <button class="btn btn-default btn-lg" disabled>...</button>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <!--Project Activity start-->
+                <section class="panel">
+                    <div class="panel-body progress-panel">
+                        <div class="row">
+                            <div class="col-lg-8 task-progress pull-left">
+                                <h1>To Do Everyday</h1>
+                            </div>
+                            <div class="col-lg-4">
+                    <span class="profile-ava pull-right">
+                                        {{user_id}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-hover personal-task">
+                        <tbody>
+                        <tr>
+                            <td>Today</td>
+                            <td>
+                                web design
+                            </td>
+                            <td>
+                                <span class="badge bg-important">Upload</span>
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Yesterday</td>
+                            <td>
+                                Project Design Task
+                            </td>
+                            <td>
+                                <span class="badge bg-success">Task</span>
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>21-05-14</td>
+                            <td>
+                                Generate Invoice
+                            </td>
+                            <td>
+                                <span class="badge bg-success">Task</span>
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>21-05-15</td>
+                            <td>
+                                Project Testing
+                            </td>
+                            <td>
+                                <span class="badge bg-primary">To-Do</span>
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>21-05-16</td>
+                            <td>
+                                Project Release Date
+                            </td>
+                            <td>
+                                <span class="badge bg-info">Milestone</span>
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>21-05-18</td>
+                            <td>
+                                Project Release Date
+                            </td>
+                            <td>
+                                <span class="badge bg-primary">To-Do</span>
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Last week</td>
+                            <td>
+                                Project Development
+                            </td>
+                            <td>
+                                <span class="badge bg-primary">To-Do</span>
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>last month</td>
+                            <td>
+                                Project Development
+                            </td>
+                            <td>
+                                <span class="badge bg-success">To-Do</span>
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </section>
+                <!--Project Activity end-->
+            </div>
+        </div>
+    </section>
+</section>
+
+<script>
+
+    function popup(){
+         $("#myModal").modal("show");
+         explanation();
+    }
+
+    function explanation() {
+        var strurl = 'explainer';
+        xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 1) {
+                $('html').css("cursor", "wait");
+            }
+            if (xhr.readyState == 4) {
+                $('html').css("cursor", "auto");
+                var data = xhr.responseText;
+                var obj = JSON.parse(data);
+                if (obj.success == false) {
+                    alert(obj.message);
+                } else {
+                    document.getElementById("title1").innerText = obj.title1
+                    document.getElementById("title2").innerText = obj.title2
+                    document.getElementById("title3").innerText = obj.title3
+                    document.getElementById("title4").innerText = obj.title4
+                    document.getElementById("img1").src = '/' + obj.img1;
+                    document.getElementById("img2").src = '/' + obj.img2;
+                    document.getElementById("img3").src = '/' + obj.img3;
+                    document.getElementById("img4").src = '/' + obj.img4;
+                    document.getElementById("text1").innerText = obj.text1
+                    document.getElementById("text2").innerText = obj.text2
+                    document.getElementById("text3").innerText = obj.text3
+                    document.getElementById("text4").innerText = obj.text4
+                }
+            }
+        };
+
+        xhr.open('GET', strurl);
+        xhr.setRequestHeader('X-CSRFToken', csrftoken);
+        xhr.send(null);
+    }
+
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+<script>
+    var ctx = document.getElementById('mychart').getContext('2d');
+
+    var this_year = 2021;
+    var this_month = 1;
+    var year_index = 0;
+    var is_predict_data_given = false;
+
+    var period_list = [];
+    var cost_list = [];
+    var predict_max = [];
+    var predict_min = [];
+
+    var chart_data;
+    var chart_opt;
+    var chart;
+
+    var csrftoken = getCookie('csrftoken');
+
+    var xhr_costbill = new XMLHttpRequest();
+    xhr_costbill.onreadystatechange = function () {
+            if (xhr_costbill.readyState == 4) {
+                if (xhr_costbill.status == 200) {
+                    var data = xhr_costbill.responseText;
+                    var json_data = JSON.parse(data);
+                    var temp_period = [];
+
+                    for (var i = 0; i < json_data.length; i++) {
+                        temp_period[i] = json_data[i]['periodym_cd'];
+                    }
+
+                    var item_set = new Set(temp_period);
+                    temp_period = [...item_set];
+                    temp_period.sort();
+
+                    for (var i = 0; i < temp_period.length; i++) {
+                        period_list[i] = Math.floor(temp_period[i] / 100) + "." + temp_period[i] % 100;
+                    }
+
+                    set_year_selectbox();
+                    set_whole_data(json_data);
+                    initialize_chart_data();
+                    draw_chart();
+                }
+            } else {
+                if (xhr_costbill.status == 400) {
+                    var data = xhr_costbill.responseText;
+                    var obj = JSON.parse(data);
+                }
+            }
+        };
+
+    var xhr_prediction = new XMLHttpRequest();
+    xhr_prediction.onreadystatechange = function () {
+        if (xhr_prediction.readyState == 4) {
+            if (xhr_prediction.status == 200) {
+                var data = xhr_prediction.responseText;
+                var json_data = JSON.parse(data);
+
+                is_predict_data_given = true;
+
+                for(var i=1; i<=3; i++) {
+                    period_list.push(json_data['periodym' + i + '_cd'])
+                }
+
+                for (var i = 1; i <= 3; i++) {
+                    cost_list.push(json_data['prediction' + i + '_cost']);
+                    predict_max.push(json_data['prediction' + i + '_max']);
+                    predict_min.push(json_data['prediction' + i + '_min']);
+                }
+
+                var displayed_period = [];
+                var displayed_cost = [];
+                var temp_min = [];
+                var temp_max = [];
+
+                for (var i = year_index; i < period_list.length; i++) {
+                    displayed_period.push(period_list[i]);
+                }
+
+                for (var i = year_index; i < cost_list.length; i++) {
+                    displayed_cost.push(cost_list[i]);
+                    temp_min.push(predict_max[i]);
+                    temp_max.push(predict_min[i]);
+                }
+
+                chart_data.labels = displayed_period;
+                chart_data.datasets[0].data = displayed_cost;
+                chart_data.datasets[1].data = temp_max;
+                chart_data.datasets[2].data = temp_min;
+
+                chart.update();
+            }
+        } else {
+            if (xhr_prediction.status == 400) {
+                var data = xhr_prediction.responseText;
+                var obj = JSON.parse(data);
+            }
+        }
+    };
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    window.onload = function() {
+        var costbill_url = "http://223.194.46.212:8757/rest_api/costbill";
+        xhr_costbill.open("GET", costbill_url, true);
+        xhr_costbill.setRequestHeader("X-CSRFToken", csrftoken);
+        xhr_costbill.setRequestHeader("Content-Type", "application/json");
+        xhr_costbill.send(null);
+    }
+
+    function set_whole_data(data){
+        for (var i = 0; i < period_list.length; i++) {
+            cost_list[i] = 0;
+        }
+
+        for (var i = 0; i < data.length; i++) {
+            var idx = period_list.indexOf(Math.floor(data[i]['periodym_cd'] / 100) + "." + data[i]['periodym_cd'] % 100);
+
+            if(idx == -1)
+                continue;
+
+            cost_list[idx] += (data[i]['proq'] * data[i]['proamt_unit']);
+            predict_max[idx] = cost_list[idx];
+            predict_min[idx] = cost_list[idx];
+        }
+    }
+
+    function initialize_chart_data() {
+        chart_data = {
+            labels: period_list,
+            datasets: [{
+                label: "매출액",
+                fill: '+2',
+                backgroundColor: '#D8ABF1',
+                borderColor: '#62879A',
+                lineTension: 0,
+                borderWidth: 2,
+                pointRadius: 0,
+                data: cost_list
+            }, {
+                label: "매출액 최대",
+                fill: '-1',
+                backgroundColor: '#D8ABF1',
+                borderColor: 'transparent',
+                pointRadius: 0,
+                data: predict_max
+            }, {
+                label: "매출액 최소",
+                backgroundColor: 'rgba(221, 255, 255, 0.3)',
+                borderColor: 'transparent',
+                pointRadius: 0,
+                fill: 'origin',
+                data: predict_min
+            }]
+        };
+        chart_opt = {
+            responsive: false,
+            legend: {
+                display: false
+            },
+            plugins: {
+                filler: {
+                    propagate: false
+                }
+            },
+            scales: {
+                xAxes: [{
+                    ticks: {
+                        autoSkip: false,
+                        padding: 10,
+                        callback: function (value, index, values) {
+                            if (is_predict_data_given) {
+                                if (index % 12 == 0 || index >= values.length - 4)
+                                    return value;
+                                else
+                                    return "";
+                            } else {
+                                if (index % 12 == 0 || index == values.length - 1)
+                                    return value;
+                                else
+                                    return "";
+                            }
+                        },
+                    },
+                    gridLines: {
+                        drawTicks: false,
+                        zeroLineColor: 'black',
+                        zeroLineWidth: 2
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: '기간(월)'
+                    }
+                }],
+                yAxes: [{
+                    ticks: {
+                        padding: 10
+                    },
+                    gridLines: {
+                        drawTicks: false,
+                        zeroLineColor: 'black',
+                        zeroLineWidth: 2
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: '매출액(원)'
+                    }
+                }]
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false,
+            }
+        };
+
+        var gridLinesColor = [];
+        for (var i = 0; i < cost_list.length; i++) {
+            if (i % 12 == 0)
+                gridLinesColor.push('#E0E0E0');
+            else
+                gridLinesColor.push('transparent');
+        }
+
+        chart_opt.scales.xAxes[0].gridLines.color = gridLinesColor;
+    }
+
+    Chart.defaults.LineWithLine = Chart.defaults.line;
+    Chart.controllers.LineWithLine = Chart.controllers.line.extend({
+        draw: function (ease) {
+            Chart.controllers.line.prototype.draw.call(this, ease);
+            if (this.chart.tooltip._active && this.chart.tooltip._active.length) {
+                var activePoint = this.chart.tooltip._active[0],
+                    ctx = this.chart.ctx,
+                    x = activePoint.tooltipPosition().x,
+                    y = activePoint.tooltipPosition().y,
+                    topY = activePoint.tooltipPosition().y - 20,
+                    bottomY = this.chart.scales['y-axis-0'].bottom;
+
+                // draw line
+                ctx.save();
+                ctx.beginPath();
+                ctx.moveTo(x - 5, topY);
+                ctx.lineTo(x, bottomY);
+                ctx.lineWidth = 10;
+                ctx.strokeStyle = '#ff0000';
+                ctx.stroke();
+                ctx.restore();
+            }
+        }
+    });
+
+    function draw_chart() {
+        chart = new Chart(ctx, {
+            type: 'line',
+            data: chart_data,
+            options: chart_opt
+        });
+    }
+
+    function set_year_selectbox() {
+        var year_selectbox = document.getElementById('year_selectbox');
+        var starting_year = Math.floor(period_list[0]);
+
+        for(var i=starting_year; i<=this_year; i++) {
+            var option = document.createElement('option');
+            option.innerText = i + "";
+            year_selectbox.appendChild(option);
+        }
+    }
+
+    function get_predict() {
+        var prediction_url = "http://223.194.46.212:8757/rest_api/ca-prediction_main";
+        xhr_prediction.open("GET", prediction_url, true);
+        xhr_prediction.setRequestHeader("X-CSRFToken", csrftoken);
+        xhr_prediction.setRequestHeader("Content-Type", "application/json");
+        xhr_prediction.send(null);
+
+        var btn_get_predict = document.getElementById('btn_get_predict');
+        btn_get_predict.setAttribute('disabled', true);
+        $("#year_selectbox option:eq(20)").prop("selected", true);
+        change_data_year()
+    }
+
+    function change_data_year() {
+        var year_selectbox = document.getElementById('year_selectbox');
+        var selected_year = year_selectbox.options[year_selectbox.selectedIndex].value;
+        year_index = 0;
+
+        while(selected_year >  Math.floor(period_list[year_index])) {
+            year_index++;
+        }
+
+        var displayed_period = [];
+        var displayed_cost = [];
+        var temp_min = [];
+        var temp_max = [];
+
+        for (var i=year_index; i<period_list.length; i++) {
+            displayed_period.push(period_list[i]);
+        }
+
+        for (var i=year_index; i<cost_list.length; i++) {
+            displayed_cost.push(cost_list[i]);
+            temp_min.push(predict_max[i]);
+            temp_max.push(predict_min[i]);
+        }
+
+        chart_data.labels = displayed_period;
+        chart_data.datasets[0].data = displayed_cost;
+        chart_data.datasets[1].data = temp_max;
+        chart_data.datasets[2].data = temp_min;
+        chart.update();
+    }
+
+    function train(){
+        var payload = {
+            "flag": 'train',
+        };
+
+        xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4) {
+                if (xhr.status == 201)
+                    alert("학습 완료");
+                    location.reload();
+            } else {
+                if (xhr.status == 400) {
+                  alert("400 Bad Request");
+                }
+            }
+        };
+
+        var strurl = "http://223.194.46.212:8757/rest_api/trained-data";
+        xhr.open("POST", strurl, true);
+        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(JSON.stringify(payload));
+        alert("약 20초의 시간이 소요됩니다.");
+    }
+
+    function predict() {
+        var payload = {
+            "flag": 'predict',
+        };
+
+        xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4) {
+                if (xhr.status == 201)
+                    alert("예측 완료");
+                    get_predict(); //일단 마지막에 실행되는 것으로 보류.
+            } else {
+                if (xhr.status == 400) {
+                  alert("400 Bad Request");
+                }
+            }
+        };
+
+        var strurl = "http://223.194.46.212:8757/rest_api/predicted-data";
+        xhr.open("POST", strurl, true);
+        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(JSON.stringify(payload));
+    }
+</script>
+
+{% endblock %}
+
