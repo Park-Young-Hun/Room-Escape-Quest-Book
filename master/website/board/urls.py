@@ -7,7 +7,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('reviews/', views.review_list, name='review_list'),
     path('reviews/<int:pk>', views.review_detail, name='review_detail'),
-    path('b_item/', views.b_item, name='b_item_list'),
+    path('ranking/', views.ranking, name='ranking'),
 
 
     # 사용자 관리

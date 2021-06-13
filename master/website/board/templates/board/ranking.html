@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block scripts %}
+{{ block.super }}
+
+
+{% endblock %}
+
+{% block body %}
+
+{% include "navbar.html" %}
+{% include "sidebar.html" %}
+
+<!--main content start-->
+<section id="main-content">
+    <section class="wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h3 class="page-header"><i class="fa fa-table"></i> 최고의 방탈출 테마 Best 10 (by 코로리 방탈출 커뮤니티)</h3>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <section class="panel">
+                    <div class="table-responsive">
+                        <table class="table" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>순위</th>
+                                    <th>매장</th>
+                                    <th>테마</th>
+                                    <th>평점</th>
+                                    <th>리뷰수</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                {% if ranking_list %}
+                                {% for i in ranking_list %}
+                                <tr>
+                                    {% for j in i %}
+                                    <td>
+                                        <label class="form-control">{{ j }}</label>
+                                    </td>
+                                    {% endfor %}
+                                </tr>
+
+                                {% endfor %}
+                                {% else %}
+                                <tr>
+                                    <td>
+                                     <span>내용이 없습니다.</span>
+                                    </td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </section>
+            </div>
+        </div>
+    </section>
+    <!--main content end-->
+</section>
+<!-- container section start -->
+{% endblock %}

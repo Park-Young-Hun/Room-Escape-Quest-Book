@@ -1,12 +1,13 @@
 import os
 from urllib.error import HTTPError
-
+import requests
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
-
 from .models import *
 from django.http import HttpResponse, JsonResponse
+from bs4 import BeautifulSoup
+from selenium import webdriver
 from django.db.models import Q
 from datetime import datetime
 
@@ -236,7 +237,8 @@ def review_list(request):  # review list
     context["p_num"] = p_num
     context["range"] = range(1, 7)
     context["star_num"] = star_num
-    print(rv.values('star_num'))
+    print(rv.count())
+    context["rv_len"] = rv.count()
 
     context["title"] = "해결한 퀘스트 목록"
     context["result_msg"] = "해결한 퀘스트 목록"
@@ -267,6 +269,39 @@ def review_detail(request, pk):  # review detail
     return render(request, board_path + "review_detail.html", context)
 
 
-def b_item(request):
+def ranking(request):
     context = {}
-    return render(request, board_path + "b_item.html", context)
+
+    if request.session.has_key('id'):  # 로그인 되어있는 상태인지 체크.
+        member_no = request.session['id']
+        member_id = request.session['user_id']
+    else:
+        member_no = None
+        member_id = None
+
+        return redirect('board:home')
+
+    context["id"] = member_no
+    context["user_id"] = member_id
+
+    ranking_list = []
+
+    webpage = requests.get("http://colory.mooo.com/ranking")
+    soup = BeautifulSoup(webpage.content, "html.parser")
+    obj_list = soup.select("#theme-button-1 > table > tbody > tr")
+
+    for i in range(10):
+        obj = obj_list[i].select("td")
+        for j in range(5):
+            ranking_list.append(obj[j].get_text())
+
+    ranking_list[0] = "1"
+    ranking_list[5] = "2"
+    ranking_list[10] = "3"
+
+    whole_list = [ranking_list[0:5], ranking_list[5:10], ranking_list[10:15], ranking_list[15:20],
+                  ranking_list[20:25], ranking_list[25:30], ranking_list[30:35], ranking_list[35:40],
+                  ranking_list[40:45], ranking_list[45:50]]
+    context["ranking_list"] = whole_list
+
+    return render(request, board_path + "ranking.html", context)

@@ -28,6 +28,7 @@ pytz==2020.1
 requests==2.25.1
 ruamel.yaml==0.17.9
 ruamel.yaml.clib==0.2.2
+selenium==3.141.0
 sqlparse==0.4.1
 typing-extensions==3.10.0.0
 uritemplate==3.0.1
