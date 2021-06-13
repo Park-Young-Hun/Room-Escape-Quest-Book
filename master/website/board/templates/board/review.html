@@ -35,6 +35,7 @@
                                     <th>참가인원</th>
                                     <th>탈출 여부</th>
                                     <th>남은 시간</th>
+                                    <th>별점</th>
                                 </tr>
                             </thead>
 
@@ -70,6 +71,15 @@
                                     </td>
                                     <td>
                                         <input type="text" class="form-control" id="r_time">
+                                    </td>
+                                    <td>
+                                        <select class="star_num" style="width:100%;padding:3px;" id="star_num">
+                                            <option value="★"> ★</option>
+                                            <option value="★★"> ★★</option>
+                                            <option value="★★★"> ★★★</option>
+                                            <option value="★★★★"> ★★★★</option>
+                                            <option value="★★★★★"> ★★★★★</option>
+                                        </select>
                                     </td>
                                     <td>
                                         <button onclick="insert_element();" class="btn btn-default btn-sm">저장</button>
@@ -115,6 +125,17 @@
                                     </td>
                                     <td>
                                         <input type="text" class="form-control" id="r_time{{ i.id }}" value="{{ i.r_time }}"/>
+                                    </td>
+                                    <td>
+                                        <select class="star_num{{ i.id }}" style="width:100%;padding:3px;">
+                                            {% for k in star_num %}
+                                            {% if i.star_num == k %}
+                                            <option value="{{ k }}" selected> {{ k }} </option>
+                                            {% else %}
+                                            <option value="{{ k }}"> {{ k }} </option>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </select>
                                     </td>
                                      <td width="5%">
                                         <button class="btn btn-default btn-sm" id="review_{{i.id}}" name="{{i.id}}" onclick="review_detail(this)">리뷰 보기</button>
@@ -200,6 +221,9 @@
                 var efSelect = document.querySelector('.escape_flag');
                 var efId = efSelect.options[efSelect.selectedIndex].value;
 
+                var snSelect = document.querySelector('.star_num');
+                var snId = snSelect.options[snSelect.selectedIndex].value;
+
                 var payload = {
                     "visited_day": vd,
                     "region": reg,
@@ -207,7 +231,8 @@
                     "theme_name": themeNm,
                     "participant_num": pnId,
                     "escape_flag": efId,
-                    "r_time": rt
+                    "r_time": rt,
+                    "star_num": snId
                 };
 
                 xhr = new XMLHttpRequest();
@@ -248,6 +273,9 @@
                 var efSelect = document.querySelector('.escape_flag' + rowId);
                 var efId = efSelect.options[efSelect.selectedIndex].value;
 
+                var snSelect = document.querySelector('.star_num' + rowId);
+                var snId = snSelect.options[snSelect.selectedIndex].value;
+
                 var vd = document.getElementById("visited_day" + rowId).value;
                 var reg = document.getElementById("region" + rowId).value;
                 var cafeNm = document.getElementById("cafe_name" + rowId).value;
@@ -261,7 +289,8 @@
                     "theme_name": themeNm,
                     "participant_num": pnId,
                     "escape_flag": efId,
-                    "r_time": rt
+                    "r_time": rt,
+                    "star_num": snId
                 };
 
                 xhr = new XMLHttpRequest();

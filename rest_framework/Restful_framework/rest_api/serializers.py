@@ -8,7 +8,7 @@ from rest_framework import serializers
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
-        fields = ('visited_day', 'region', 'cafe_name', 'theme_name', 'participant_num', 'escape_flag', 'r_time')
+        fields = ('visited_day', 'region', 'cafe_name', 'theme_name', 'participant_num', 'escape_flag', 'r_time', 'star_num')
 
 
 class ReviewDetailSerializer(serializers.ModelSerializer):

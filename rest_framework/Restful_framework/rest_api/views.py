@@ -40,7 +40,7 @@ def review_detail(request, pk):
     if request.method == 'POST':
         data = JSONParser().parse(request)
 
-        serializer = ReviewDetailSerializer(data=data)
+        serializer = ReviewDetailSerializer(obj, data=data)
 
         if serializer.is_valid():
             serializer.save()

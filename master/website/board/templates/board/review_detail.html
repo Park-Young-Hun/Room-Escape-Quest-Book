@@ -25,10 +25,10 @@
             <div class="col-lg-12">
 
                    <form>
-                      <p><textarea cols="100" rows="20" id="content_{{id}}" value="{{obj}}"></textarea></p>
-                       <button class="btn btn-primary btn-sm" id="insert_{{id}}" name="{{ id }}" onclick="insert_element(this);" style="width: 5%">등록</button>
-                       <button class="btn btn-primary btn-sm" id="update_{{id}}" name="{{ id }}" onclick="insert_element(this);" style="width: 5%">수정</button>
-                       <button class="btn btn-primary btn-sm" id="delete_{{id}}" name="{{ id }}" onclick="delete_element(this);" style="width: 5%">삭제</button>
+                       <p><textarea cols="100" rows="20" id="content_{{id}}">{{obj}}</textarea></p>
+                       <button type="button" class="btn btn-primary btn-sm" id="insert_{{id}}" name="{{ id }}" onclick="insert_element(this);" style="width: 5%">등록</button>
+                       <button type="button" class="btn btn-primary btn-sm" id="update_{{id}}" name="{{ id }}" onclick="insert_element(this);" style="width: 5%">수정</button>
+                       <button type="button" class="btn btn-primary btn-sm" id="delete_{{id}}" name="{{ id }}" onclick="cancel();" style="width: 5%">취소</button>
 
                    </form>
 
@@ -68,8 +68,8 @@
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState == 4) {
                         if(xhr.status==201) {
-                            alert("등록이 완료되었습니다.");
-                            location.href="http://127.0.0.1:8000/board/reviews"
+                            alert("등록(수정)이 완료되었습니다.");
+                            location.href="http://127.0.0.1:8000/board/reviews/"
                         }
                     }
                     else {
@@ -94,96 +94,8 @@
                 xhr.send(JSON.stringify(payload));
             }
 
-            function update_element(elem) {
-                var rowId = elem.getAttribute('name');
-
-                var pnSelect = document.querySelector('.participant_num' + rowId);
-                var pnId = pnSelect.options[pnSelect.selectedIndex].value;
-
-                var efSelect = document.querySelector('.escape_flag' + rowId);
-                var efId = efSelect.options[efSelect.selectedIndex].value;
-
-                var vd = document.getElementById("visited_day" + rowId).value;
-                var reg = document.getElementById("region" + rowId).value;
-                var cafeNm = document.getElementById("cafe_name" + rowId).value;
-                var themeNm = document.getElementById("theme_name" + rowId).value;
-                var rt = document.getElementById("r_time" + rowId).value;
-
-                var payload = {
-                    "visited_day": vd,
-                    "region": reg,
-                    "cafe_name": cafeNm,
-                    "theme_name": themeNm,
-                    "participant_num": pnId,
-                    "escape_flag": efId,
-                    "r_time": rt
-                };
-
-                xhr = new XMLHttpRequest();
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState == 4) {
-                        if(xhr.status==200)
-                            alert("수정이 완료되었습니다.");
-                        location.reload();
-                    }
-                    else {
-                        if(xhr.status==400) {
-                            var data = xhr.responseText;
-                            var obj = JSON.parse(data);
-
-                            if (obj.detail == "") {//추후 에러처리 추가시 사용
-                                alert("에러코드");
-                            }
-                            else {
-                                alert("400 Bad Request");
-                            }
-                        }
-                    }
-                };
-
-                var strurl = "http://127.0.0.1:8080/rest_api/reviews/" + rowId;
-                xhr.open("PUT", strurl, true);
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                xhr.setRequestHeader("Content-Type", "application/json");
-                xhr.send(JSON.stringify(payload));
-            }
-
-            function delete_element(elem) {
-                var rowId = elem.getAttribute('name');
-
-                xhr = new XMLHttpRequest();
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState == 4) {
-                        if(xhr.status==204)
-                            alert("삭제가 완료되었습니다.");
-                        location.reload();
-                    }
-                    else {
-                        if(xhr.status==400) {
-                            var data = xhr.responseText;
-                            var obj = JSON.parse(data);
-
-                            if (obj.detail == "") {//추후 에러처리 추가시 사용
-                                alert("에러코드");
-                            }
-                            else {
-                                alert("400 Bad Request");
-                            }
-                        }
-                    }
-                };
-
-                var strurl = "http://127.0.0.1:8080/rest_api/reviews/" + rowId;
-                xhr.open("DELETE", strurl, true);
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                xhr.setRequestHeader("Content-Type", "application/json");
-                xhr.send(null);
-            }
-
-            function review_detail(elem) {
-                var rowId = elem.getAttribute('name');
-                var strurl = "http://127.0.0.1:8000/board/reviews/" + rowId;
-                location.href = strurl;
+            function cancel() {
+                location.href="http://127.0.0.1:8000/board/reviews/";
             }
         </script>
     </section>

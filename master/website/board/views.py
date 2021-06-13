@@ -231,14 +231,18 @@ def review_list(request):  # review list
 
     rv = Review.objects.all()
     p_num = ['O', 'X']
+    star_num = ['★', '★★', '★★★', '★★★★', '★★★★★']
     context["rsCo"] = rv
     context["p_num"] = p_num
     context["range"] = range(1, 7)
+    context["star_num"] = star_num
+    print(rv.values('star_num'))
 
     context["title"] = "해결한 퀘스트 목록"
     context["result_msg"] = "해결한 퀘스트 목록"
 
     return render(request, board_path + "review.html", context)
+
 
 def review_detail(request, pk):  # review detail
     context = {}
