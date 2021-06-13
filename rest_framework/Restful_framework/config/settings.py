@@ -133,7 +133,7 @@ STATIC_URL = '/static/'
 
 CORS_ORIGIN_WHITELIST = (
     "http://127.0.0.1:8000",
-    "http://223.194.46.212:8756",
+    "http://223.194.46.212:8758",
 )
 
 SESSION_COOKIE_AGE = 600

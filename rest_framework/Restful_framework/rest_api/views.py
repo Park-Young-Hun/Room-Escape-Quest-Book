@@ -7,8 +7,6 @@ from .serializers import *
 from rest_framework.parsers import JSONParser
 from rest_framework.decorators import api_view
 from rest_framework import exceptions
-from openpyxl import Workbook
-import pymysql
 from django.conf import settings
 
 
